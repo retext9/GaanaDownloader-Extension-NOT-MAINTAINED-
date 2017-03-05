@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Gaana Downloader",
+  "version": "1.0.0",
+
+  "description": "An extension to selectively download songs from Gaana. (Note: https://github.com/PathriK/GaanaDownloader is required",
+  "icons": {},
+
+  "browser_action": {},
+
+  "author": "PathriK",
+  "homepage_url": "https://github.com/PathriK/GaanaDownloader-Extension"
+}
