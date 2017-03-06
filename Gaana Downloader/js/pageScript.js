@@ -28,10 +28,10 @@ chrome.runtime.onMessage.addListener(
     if(request.action){
 		if (request.action == "getResults"){
 			let checkedItems = getCheckedItems();
-			let responseVals = $.map(checkedItems,(index, elem) => {
+			let responseVals = $.map(checkedItems,(elem, index) => {
 				console.log("index:" + index);
 				console.log("elem:" + elem);
-				return elem.val();
+				return elem.value;
 			});			
 			//let responseVals = "kk";
 			sendResponse({data:responseVals});
