@@ -5,6 +5,11 @@ $(document).ready(function() {
 
 
 function init(){
+	initCheckBoxes();
+	initListener();
+}
+
+function initCheckBoxes(){
 	let results = $("h3 a");
 	//console.log("number of results:" + results.length);
 	results.each((index,result) => {
@@ -12,6 +17,21 @@ function init(){
 		let hrefValue = $(result).attr("href");
 		loadCheckBox(result);
 	});	
+}
+
+function initListener(){
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    // console.log(sender.tab ?
+                // "from a content script:" + sender.tab.url :
+                // "from the extension");
+    if(request.action){
+		if (request.action == "getResults"){
+			let checkedItems = getCheckedItems();
+			sendResponse({data: checkedItems.length});
+		}			
+	}
+  });	
 }
 
 function loadCheckBox(targetElem){

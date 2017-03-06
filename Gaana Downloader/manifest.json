@@ -17,7 +17,10 @@
     }
   ],
   
-  "browser_action": {},
+  "browser_action": {
+	"default_title": "Gaana Download Helper",
+    "default_popup": "html/popup.html"
+  },
   
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArRrV2c1WcD8P3WyLyPJ5IvBpZ/S7hYqLbEqqd1pGHbWEhXZHIXDFNSYDvGte42E2M+7HXFm/RSqV20pxLp9GNOm/zVaXe8/QDXqhmVLWG+ArLl0TWnUivqOPRqXPUDyRtZPQGqJrQoRoXebEjC44vOHUhiy903GTGMv+aW1bbVH9V07CWlo0NUD8MLhKbqugoRMbyzyJ4rSXo3mc8F87/jkFcGMlkgqyayHeLPlS7Re+xeEOmE9hZFlKzBxWYk94EVT2+UjpAXP0ydiDAKtEXWUgWOQ01hYLlzELvmZsH0JPB3iBF/186xheaPmSyT/wh/aUBdO90haTFOp0qptgJwIDAQAB"
 }
