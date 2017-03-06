@@ -12,7 +12,7 @@ function init(){
 function initCheckBoxes(){
 	let results = $("h3 a");
 	//console.log("number of results:" + results.length);
-	results.each((index,result) => {
+	results.each((index, result) => {
 		//console.log($(result).attr("href"));
 		let hrefValue = $(result).attr("href");
 		loadCheckBox(result);
@@ -28,7 +28,13 @@ chrome.runtime.onMessage.addListener(
     if(request.action){
 		if (request.action == "getResults"){
 			let checkedItems = getCheckedItems();
-			sendResponse({data: checkedItems.length});
+			let responseVals = $.map(checkedItems,(index, elem) => {
+				console.log("index:" + index);
+				console.log("elem:" + elem);
+				return elem.val();
+			});			
+			//let responseVals = "kk";
+			sendResponse({data:responseVals});
 		}			
 	}
   });	
@@ -49,5 +55,5 @@ function getCheckValue(targetElem){
 }
 
 function getCheckedItems(){
-	return $("input[type='checkbox'][name='GaanaDownloader']");
+	return $("input[type='checkbox'][name='GaanaDownloader']:checked");
 }
