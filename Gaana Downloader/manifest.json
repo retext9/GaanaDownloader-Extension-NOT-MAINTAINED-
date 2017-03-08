@@ -8,6 +8,8 @@
   "homepage_url": "https://github.com/PathriK/GaanaDownloader-Extension",
 
   "icons": {},
+  
+  "permissions": ["nativeMessaging"],
 
   "content_scripts": [
     {

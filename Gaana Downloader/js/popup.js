@@ -1,3 +1,4 @@
+const downloaderName = "";
 var songIds;
 var albumIds;
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,12 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function downloadRegister(){
-	document.getElementById("download").addEventListener('click',function(){
-		let song_ids = songIds.join(";");
-		let album_ids = albumIds.join(";"); 
-		//TODO: Native messaging
-		console.log(song_ids + album_ids);
+	document.getElementById("download").addEventListener('click',function(){		
+		messageDownloader(songIds, albumIds);
 	})
+}
+
+function messageDownloader(song_ids, album_ids){
+	//TODO: Native messaging
+	chrome.runtime.sendNativeMessage(
+		downloaderName,
+		{ song_ids: song_ids, album_ids: album_ids },
+		function(response) {
+			console.log("Received " + response);
+			document.getElementById("status-bar").textContent = response;
+		}
+	);
 }
 
 function queryData(){

@@ -1,7 +1,7 @@
 //TODO: modify constants
-let entitySelector = "h3 a";
-let songCbName = "GaanaDownloaderSong";
-let albumCbName = "GaanaDownloaderAlbum";
+const entitySelector = "h3 a";
+const songCbName = "GaanaDownloaderSong";
+const albumCbName = "GaanaDownloaderAlbum";
 
 $(document).ready(function() { 
 	init();
