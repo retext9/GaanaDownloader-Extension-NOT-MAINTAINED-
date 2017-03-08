@@ -1,4 +1,8 @@
-console.log("GAANADOWNLOADER");
+//TODO: modify constants
+let entitySelector = "h3 a";
+let songCbName = "GaanaDownloaderSong";
+let albumCbName = "GaanaDownloaderAlbum";
+
 $(document).ready(function() { 
 	init();
 });
@@ -10,11 +14,8 @@ function init(){
 }
 
 function initCheckBoxes(){
-	let results = $("h3 a");
-	//console.log("number of results:" + results.length);
+	let results = $(entitySelector);
 	results.each((index, result) => {
-		//console.log($(result).attr("href"));
-		let hrefValue = $(result).attr("href");
 		loadCheckBox(result);
 	});	
 }
@@ -22,38 +23,62 @@ function initCheckBoxes(){
 function initListener(){
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    // console.log(sender.tab ?
-                // "from a content script:" + sender.tab.url :
-                // "from the extension");
     if(request.action){
-		if (request.action == "getResults"){
-			let checkedItems = getCheckedItems();
-			let responseVals = $.map(checkedItems,(elem, index) => {
-				console.log("index:" + index);
-				console.log("elem:" + elem);
-				return elem.value;
-			});			
-			//let responseVals = "kk";
-			sendResponse({data:responseVals});
+		if (request.action == "getResults"){		
+			let responseVals = getChekedItems();
+			sendResponse(
+				{
+					errorFlag:false,
+					data:responseVals
+				}
+			);
 		}			
 	}
   });	
 }
 
+function getChekedItems(){	
+	let checkedItems = getCheckedSongs();
+	let checkedSongs = $.map(checkedItems,(elem, index) => {
+		return {song_name:elem.id, song_id:elem.value};
+	});
+
+	checkedItems = getCheckedAlbums();
+	let checkedAlbums = $.map(checkedItems,(elem, index) => {
+		return {album_name:elem.id, album_id:elem.value};
+	});				
+	
+	return {songs: checkedSongs, albums: checkedAlbums};
+}
+
 function loadCheckBox(targetElem){
 	var checkbox = document.createElement('input');
 	checkbox.type = "checkbox";
-	checkbox.name = "GaanaDownloader";
+	checkbox.name = isSongElem()?songCbName:albumCbName;
 	checkbox.value = getCheckValue(targetElem);
-	//checkbox.id = "id";
+	checkbox.id = getCheckId(targetElem);
 
 	targetElem.after(checkbox);
 }
 
+function isSongElem(){
+	//TODO: add logic
+	return true;
+}
+
 function getCheckValue(targetElem){
+	//TODO: modify accordingly
 	return $(targetElem).attr('href');
 }
 
-function getCheckedItems(){
-	return $("input[type='checkbox'][name='GaanaDownloader']:checked");
+function getCheckId(targetElem){
+	//TODO: modify accordingly
+	return $(targetElem).text();
+}
+
+function getCheckedSongs(){
+	return $("input[type='checkbox'][name='" + songCbName + "']:checked");
+}
+function getCheckedAlbums(){
+	return $("input[type='checkbox'][name='" + albumCbName + "']:checked");
 }
