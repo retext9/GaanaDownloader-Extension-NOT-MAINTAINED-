@@ -1,4 +1,4 @@
-const downloaderName = "";
+const downloaderName = "in.pathri.singleinstance";
 var songIds;
 var albumIds;
 document.addEventListener('DOMContentLoaded', function() {
@@ -21,7 +21,8 @@ function messageDownloader(song_ids, album_ids){
 		{ song_ids: song_ids, album_ids: album_ids },
 		function(response) {
 			console.log("Received " + response);
-			document.getElementById("status-bar").textContent = response;
+			console.log("Recieved errorFlag" + response.errorFlag);
+			document.getElementById("status-bar").textContent = response.message;
 		}
 	);
 }
