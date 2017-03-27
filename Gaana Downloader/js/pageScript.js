@@ -1,16 +1,55 @@
-//TODO: modify constants
-const entitySelector = "h3 a";
+/* //*[contains(@id,'parent-row')]
+parent-row-album (2)
+parent-row-song (10)
+parent-row-playlist (3)
+parent-row-gaanaradio
+parent-row-radio
+$("#parent-row-song21262810").parent().find("a[title='Humsafar']")
+$("<p>testetst</p>").insertAfter(trgtElem) */
+
+
+const entitySelector = "span[id*='parent-row']";
 const songCbName = "GaanaDownloaderSong";
 const albumCbName = "GaanaDownloaderAlbum";
+const observerContainer = "div[pjax-div]";
+const targetSelector = {
+	home_album: targetElem => $(targetElem).next("li").find("a[data-pjax][class*='album-name']"),
+	home_song: targetElem => $(targetElem).parent().find("h3"),
+	album_album: targetElem => $(targetElem).parent().find("h1"),
+	album_song: targetElem => $(targetElem).parent().find("li[class='s_title'] a[data-type='playSong']")
+}
 
 $(document).ready(function() { 
 	init();
+	observeMutation();
 });
-
 
 function init(){
 	initCheckBoxes();
 	initListener();
+}
+
+function observeMutation(){
+	let target = document.querySelector(observerContainer);
+
+	let observer = new MutationObserver(function(mutations) {
+	  
+	  mutations.forEach(function(mutation) {
+		let addedNodes = mutation.addedNodes;
+		if(addedNodes.length > 1){
+			init();
+		}
+	  });
+	});
+
+	let config = {
+	  childList: true,
+	  attributes: false,
+	  characterData: false,
+	  subtree: false
+	};
+
+	observer.observe(target, config);	
 }
 
 function initCheckBoxes(){
@@ -40,40 +79,91 @@ chrome.runtime.onMessage.addListener(
 function getChekedItems(){	
 	let checkedItems = getCheckedSongs();
 	let checkedSongs = $.map(checkedItems,(elem, index) => {
-		return {song_name:elem.id, song_id:elem.value};
+		return {song_name:elem.value, song_id:elem.id};
 	});
 
 	checkedItems = getCheckedAlbums();
 	let checkedAlbums = $.map(checkedItems,(elem, index) => {
-		return {album_name:elem.id, album_id:elem.value};
+		return {album_name:elem.value, album_id:elem.id};
 	});				
 	
 	return {songs: checkedSongs, albums: checkedAlbums};
 }
 
 function loadCheckBox(targetElem){
-	var checkbox = document.createElement('input');
-	checkbox.type = "checkbox";
-	checkbox.name = isSongElem()?songCbName:albumCbName;
-	checkbox.value = getCheckValue(targetElem);
-	checkbox.id = getCheckId(targetElem);
-
-	targetElem.after(checkbox);
+	let elemJSON = getJSONContent(targetElem);
+	let checkBxElem = getCheckBoxElem(elemJSON);
+	if(checkBxElem != null){
+		let titleElem = getTitleElem(targetElem, elemJSON);
+		if(titleElem != null){
+			$(checkBxElem).insertBefore(titleElem);
+		}
+	}
 }
 
-function isSongElem(){
-	//TODO: add logic
-	return true;
+function getTitleElem(targetElem, elemJSON){
+	let currentPage = getCurrentPage();
+	let titleElem = null;
+	let type = "";
+	switch(elemJSON.object_type){
+		case 2:
+			type = "album";
+			break;
+		case 10:
+			type = "song";
+			break;
+	}	
+	if(type.length == 0) return titleElem;
+	switch(currentPage){
+		case "":
+			titleElem = targetSelector["home_" + type](targetElem);
+			break;
+		case "album":
+			titleElem = targetSelector["album_" + type](targetElem);
+			break;
+	}			
+	return titleElem;
 }
 
-function getCheckValue(targetElem){
-	//TODO: modify accordingly
-	return $(targetElem).attr('href');
+function getCurrentPage(){
+	return window.location.pathname.split('/')[1];
 }
 
-function getCheckId(targetElem){
-	//TODO: modify accordingly
-	return $(targetElem).text();
+function getJSONContent(targetElem){
+	let jsonText = $(targetElem).text();
+	if( jsonText.length !== 0){
+		jsonObj = JSON.parse(jsonText);
+		return jsonObj;
+	}
+	return null;
+}
+
+function getCheckBoxElem(elemJSON){
+	if(elemJSON != null){
+		let cbName = getCheckBoxName(elemJSON);
+		if(cbName.length !== 0){
+			var checkbox = document.createElement('input');
+			checkbox.type = "checkbox";
+			checkbox.name = cbName;
+			checkbox.value = elemJSON.title;
+			checkbox.id = elemJSON.id;
+			return checkbox;
+		}
+	}
+	return null;
+}
+
+function getCheckBoxName(elemJSON){	
+	switch(elemJSON.object_type){
+		case 2:
+			return albumCbName;
+			break;
+		case 10:
+			return songCbName;
+			break;
+		default:
+			return "";
+	}
 }
 
 function getCheckedSongs(){

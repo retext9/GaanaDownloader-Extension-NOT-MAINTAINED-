@@ -13,7 +13,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.google.co.in/*"],
+      "matches": ["*://*.gaana.com/*"],
       "css": ["css/pageStyles.css"],
       "js": ["vendor/jquery.min.js", "js/pageScript.js"]
     }

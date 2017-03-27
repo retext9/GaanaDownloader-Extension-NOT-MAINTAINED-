@@ -47,7 +47,9 @@ function displaySelection(data){
 			appendLi("albums", val.album_name);
 			albumIds.push(val.album_id);
 		});
-	}	
+	}
+	console.log("AlbumIds:" + albumIds.join());
+	console.log("SongsIds:" + songIds.join());
 }
 
 
