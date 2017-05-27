@@ -1,4 +1,4 @@
-const downloaderName = "in.pathri.singleinstance";
+const downloaderName = "in.pathri.gaana.gaana_downloader";
 var songIds;
 var albumIds;
 document.addEventListener('DOMContentLoaded', function() {
