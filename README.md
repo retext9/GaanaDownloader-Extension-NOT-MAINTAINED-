@@ -1,5 +1,15 @@
-# GaanaDownloader-Extension
+# GaanaDownloader-Extension [NOT MAINTAINED]
 Chrome Extension for Gaana Downloader
+
+<pre>
+<b>
+I am extremely sorry. 
+Currently I am not able to continue supporting this project and not sure whether this tool is still working. 
+Would be happy to transfer ownership to anyone who would like to continue developing/maintaining this tool
+under one condition that this always stays as open source and free. 
+Kindly mail me @ pathrikumark@gmail.com if any one is interested
+</b>
+</pre>
 
 **Note:** This works along with [Gaana Downloader utility](https://github.com/PathriK/GaanaDownloader). Without that utility this is useless
 
